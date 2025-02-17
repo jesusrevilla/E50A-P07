@@ -47,7 +47,7 @@ jobs:
       - name: Notify status
         if: always()
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
