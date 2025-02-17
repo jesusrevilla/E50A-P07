@@ -1,4 +1,4 @@
-ame: Pruebas unitarias de la base de datos
+name: Pruebas unitarias y funcionales
 
 on:
   push:
