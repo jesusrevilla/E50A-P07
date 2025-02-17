@@ -44,14 +44,14 @@ jobs:
           psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt
           ERROR_LINES=$(grep -E "ERROR:" test_output.txt | sed 's/"/\\"/g')
           JSON_ERRORS=$(printf '%s\n' "$ERROR_LINES" | jq -R . | jq -s .)
-          COMMENT=$(printf '{"errors": %s}' "$JSON_ERRORS")
+          CMT=$(printf '{"errors": %s}' "$JSON_ERRORS")
 
-          echo "$COMMENT"
+          echo "$CMT"
           
-          echo "ERROR_LINES<<EOF" >> $GITHUB_ENV
-          echo "$ERROR_LINES" >> $GITHUB_ENV
+          echo "CMT<<EOF" >> $GITHUB_ENV
+          echo "$CMT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          echo $ERROR_LINES
+          echo $CMT
         env:
           PGPASSWORD: postgres
 
@@ -63,7 +63,7 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
           GITHUB_SHA: ${{ github.sha }}
-          ERROR_LINES: ${{ env.ERROR_LINES }}
+          ERROR_LINES: ${{ env.CMT }}
         run: |
           STATUS="failure"
           COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
@@ -80,7 +80,7 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
           GITHUB_SHA: ${{ github.sha }}
-          ERROR_LINES: ${{ env.ERROR_LINES }}          
+          ERROR_LINES: ${{ env.CMT }}          
         run: |
           STATUS="success"
           COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
