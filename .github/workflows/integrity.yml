@@ -34,7 +34,7 @@ jobs:
 
       - name: Cargar esquema de la base de datos
         run: |
-          psql -h localhost -U postgres -d testdb -f scipts.sql
+          psql -h localhost -U postgres -d testdb -f scripts.sql
         env:
           PGPASSWORD: postgres
 
