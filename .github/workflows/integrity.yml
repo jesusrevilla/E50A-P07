@@ -42,16 +42,6 @@ jobs:
         run: |
           set -o pipefail
           psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt
-          ERROR_LINES=$(grep -E "ERROR:" test_output.txt | sed 's/"/\\"/g')
-          JSON_ERRORS=$(printf '%s\n' "$ERROR_LINES" | jq -R . | jq -s .)
-          CMT=$(printf '{"errors": %s}' "$JSON_ERRORS")
-
-          echo "$CMT"
-          
-          echo "CMT<<EOF" >> $GITHUB_ENV
-          echo "$CMT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo $CMT
         env:
           PGPASSWORD: postgres
 
