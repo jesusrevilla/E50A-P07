@@ -55,11 +55,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_REF: ${{ github.ref }}
+          GITHUB_HEAD_REF: ${{ github.head_ref }}
           GITHUB_SHA: ${{ github.sha }}
           ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
-          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s\n Algún error: \n%s" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
+          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s\n Algún error: \n%s" "$GITHUB_HEAD_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
 
           echo $COMMENT
 
