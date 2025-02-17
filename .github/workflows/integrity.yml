@@ -40,6 +40,8 @@ jobs:
 
       - name: Run tests
         run: |
+          set -o pipefail
+          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt             
           psql -h localhost -U postgres -d testdb -f tests.sql
         env:
           PGPASSWORD: postgres
@@ -54,7 +56,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         run: |
           STATUS="failure"
-          COMMENT="El estado de las pruebas es: $STATUS\nBranch: $GITHUB_REF\nUsuario: $GITHUB_ACTOR\nCommit: $GITHUB_SHA"
+          COMMENT="El estado de las pruebas es: $STATUS\nBranch: $GITHUB_REF\nUsuario: $GITHUB_ACTOR\nCommit: $GITHUB_SHA\n\nMensajes de las pruebas:\n$(cat test_output.txt)"
 
           curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
@@ -70,7 +72,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         run: |
           STATUS="success"
-          COMMENT="El estado de las pruebas es: $STATUS\nBranch: $GITHUB_REF\nUsuario: $GITHUB_ACTOR\nCommit: $GITHUB_SHA"
+          COMMENT="El estado de las pruebas es: $STATUS\nBranch: $GITHUB_REF\nUsuario: $GITHUB_ACTOR\nCommit: $GITHUB_SHA\n\nMensajes de las pruebas:\n$(cat test_output.txt)"
 
           curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
