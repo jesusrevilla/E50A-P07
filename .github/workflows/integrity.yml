@@ -41,8 +41,12 @@ jobs:
       - name: Run tests
         run: |
           set -o pipefail
-          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt             
-          psql -h localhost -U postgres -d testdb -f tests.sql
+          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt
+          ERROR_LINES=$(grep -E "ERROR:" test_output.txt)
+          echo "ERROR_LINES<<EOF" >> $GITHUB_ENV
+          echo "$ERROR_LINES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo $ERROR_LINES
         env:
           PGPASSWORD: postgres
 
@@ -54,9 +58,10 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
           GITHUB_SHA: ${{ github.sha }}
+          ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
           STATUS="failure"
-          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$(cat test_output.txt)")
+          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
 
           curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
@@ -70,9 +75,10 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
           GITHUB_SHA: ${{ github.sha }}
+          ERROR_LINES: ${{ env.ERROR_LINES }}          
         run: |
           STATUS="success"
-          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$(cat test_output.txt)")
+          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
 
           curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
