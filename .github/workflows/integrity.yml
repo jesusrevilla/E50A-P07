@@ -43,7 +43,6 @@ jobs:
           set -o pipefail
           psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt
           ERROR_LINES=$(grep -E "ERROR:" test_output.txt | cut -d':' -f1-3)
-          ERROR_LINES=$(echo "$ERROR_LINES" | tr '\n' ', ')
           echo "ERROR_LINES<<EOF" >> $GITHUB_ENV
           echo "$ERROR_LINES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV          
@@ -60,7 +59,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
-          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s "Algún error: %s" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
+          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s Algún error: %s" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
 
           echo $COMMENT
 
