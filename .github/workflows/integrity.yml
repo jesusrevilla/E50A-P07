@@ -66,7 +66,7 @@ jobs:
           ERROR_LINES: ${{ env.CMT }}
         run: |
           STATUS="failure"
-          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA")
+          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "place_holder")
           echo $ERROR_LINES
           echo $COMMENT
 
@@ -85,7 +85,7 @@ jobs:
           ERROR_LINES: ${{ env.CMT }}          
         run: |
           STATUS="success"
-          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA")
+          COMMENT=$(printf "El estado de las pruebas es: %s\nBranch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$STATUS" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "place_holder")
           echo $ERROR_LINES
           echo $COMMENT
 
