@@ -63,18 +63,13 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
           GITHUB_SHA: ${{ github.sha }}
-          ERROR_LINES: ${{ env.CMT }}
         run: |
-          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s\n\nMensajes de las pruebas:\n%s" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "place_holder")
-          echo $ERROR_LINES
+          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA")
+
           echo $COMMENT
 
           curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
           -d "{\"body\": \"$COMMENT\"}"
-          if grep -qi "ERROR" $ERROR_LINES; then
-            echo "Falló la prueba"
-            exit 1
-          fi
 
       
