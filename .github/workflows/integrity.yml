@@ -1,8 +1,6 @@
 name: Pruebas unitarias y funcionales
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
