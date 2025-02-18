@@ -17,6 +17,9 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
       run: |
+        prs=$(gh pr list --state open --json number,headRefName,author,statusCheckRollup)
+        echo "$prs" > prs.json
+        
         echo "Open Pull Requests:"
         cat prs.json | jq -c '.[]' | while read pr; do
           number=$(echo "$pr" | jq -r '.number')
