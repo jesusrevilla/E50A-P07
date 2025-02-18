@@ -11,15 +11,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+
     - name: Get Open Pull Requests
       id: get-prs
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
       run: |
         prs=$(gh pr list --state open --json number,headRefName,author,statusCheckRollup --jq '.[] | {number: .number, branch: .headRefName, user: .author.login, status: .statusCheckRollup[].conclusion}')
-        echo "PRS=$prs" >> $GITHUB_ENV
-
-    - name: Display Pull Request Info
-      run: |
         echo "Open Pull Requests:"
-        echo "${{ env.PRS }}"
+        echo "$prs" | jq -c '.[]' | while read pr; do
+          number=$(echo "$pr" | jq -r '.number')
+          branch=$(echo "$pr" | jq -r '.branch')
+          user=$(echo "$pr" | jq -r '.user')
+          status=$(echo "$pr" | jq -r '.status')
+          echo "Pull Request Number: $number"
+          echo "Branch: $branch"
+          echo "User: $user"
+          echo "Status: $status"
+          echo "-------------------------"
+        done
