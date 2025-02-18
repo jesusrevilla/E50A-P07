@@ -59,9 +59,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
-          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s\n Algún error: \n%s" "$GITHUB_HEAD_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
 
-          echo $COMMENT
 
           if grep -q "ERROR:" test_output.txt; then
             exit 1
