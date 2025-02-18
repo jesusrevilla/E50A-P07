@@ -13,6 +13,8 @@ jobs:
 
     - name: Get Open Pull Requests
       id: get-prs
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       run: |
         prs=$(gh pr list --state open --json number,headRefName,author,statusCheckRollup --jq '.[] | {number: .number, branch: .headRefName, user: .author.login, status: .statusCheckRollup[].conclusion}')
         echo "PRS=$prs" >> $GITHUB_ENV
