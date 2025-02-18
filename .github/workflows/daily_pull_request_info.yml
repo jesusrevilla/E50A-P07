@@ -17,13 +17,12 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
       run: |
-        prs=$(gh pr list --state open --json number,headRefName,author,statusCheckRollup --jq '.[] | {number: .number, branch: .headRefName, user: .author.login, status: .statusCheckRollup[].conclusion}')
         echo "Open Pull Requests:"
-        echo "$prs" | jq -c '.[]' | while read pr; do
+        cat prs.json | jq -c '.[]' | while read pr; do
           number=$(echo "$pr" | jq -r '.number')
-          branch=$(echo "$pr" | jq -r '.branch')
-          user=$(echo "$pr" | jq -r '.user')
-          status=$(echo "$pr" | jq -r '.status')
+          branch=$(echo "$pr" | jq -r '.headRefName')
+          user=$(echo "$pr" | jq -r '.author.login')
+          status=$(echo "$pr" | jq -r '.statusCheckRollup[0].conclusion')
           echo "Pull Request Number: $number"
           echo "Branch: $branch"
           echo "User: $user"
