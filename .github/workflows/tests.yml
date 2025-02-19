@@ -38,7 +38,7 @@ jobs:
 
       - name: Test tables creation
         run: |
-          if ! grep -q "CREATE TABLE.*CREATE TABLE.*CREATE TABLE.*CREATE TABLE.*" sql_log.txt; then
+          if [ $(grep -c "CREATE TABLE" sql_log.txt) -lt 4 ]; then
             exit 1
           fi          
 
