@@ -41,5 +41,3 @@ jobs:
           if [ $(grep -c "CREATE TABLE" sql_log.txt) -lt 4 ] sql_log.txt; then
             exit 1
           fi          
-
-      
