@@ -39,5 +39,36 @@ jobs:
       - name: Test tables creation
         run: |
           if [ $(grep -c "CREATE TABLE" sql_log.txt) -lt 4 ]; then
+            echo "La creación de tablas son menos de 4"
             exit 1
+          else
+            echo "La creación de tablas es de al menos 4 (OK)"
           fi          
+
+
+      - name: Test insertions of 5 records
+        run: |
+          if [ $(grep -c "INSERT 0 5" sql_log.txt) -lt 5 ]; then
+            echo "Las iserciones de 5 registros son menos de 5."
+            exit 1
+          fi     
+
+      - name: Test insertions of 1 records
+        run: |
+          if [ $(grep -c "INSERT 0 1" sql_log.txt) -lt 1 ]; then
+            echo "Las inserciones de un registro son menos de una."
+            exit 1
+          else
+            echo "Cantidad de insericiones de un renglón OK"
+          fi    
+          
+      - name: Test query clientes con nombre que comienza con A 
+        run: |        
+          if grep -Pzo "cliente_id \|  nombre   \|        email        \n------------\+-----------\+---------------------\n          1 \| Ana Pérez \| ana.perez@gmail.com\n\(1 row\)" sql_log.txt; then
+            echo "La selección de cliente con nombre que comienza con A está bien."
+          else
+            echo "El archivo no contiene el texto especificado."
+            exit 1
+          fi
+                
+
