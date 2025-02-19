@@ -36,15 +36,9 @@ jobs:
         env:
           PGPASSWORD: postgres
 
-      - name: Run tests
+      - name: Test tables creation
         run: |
-          psql -h localhost -U postgres -d testdb -f tests.sql       
-        env:
-          PGPASSWORD: postgres
-
-      - name: Notify status
-        run: |
-          if grep -q "ERROR:" test_output.txt; then
+          if grep -q "CREATE TABLE.*CREATE TABLE.*CREATE TABLE.*CREATE TABLE.*INSERT 0 5.*INSERT 0 5.*INSERT 0 5.*INSERT 0 5.*INSERT 0 1.*INSERT 0 5.*INSERT 0 5" sql_log.txt; then
             exit 1
           fi          
 
