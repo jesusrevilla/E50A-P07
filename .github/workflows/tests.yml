@@ -32,13 +32,13 @@ jobs:
 
       - name: Cargar esquema de la base de datos
         run: |
-          psql -h localhost -U postgres -d testdb -f scripts.sql
+          psql -h localhost -U postgres -d testdb -f scripts.sql  2>&1 | tee sql_log.txt 
         env:
           PGPASSWORD: postgres
 
       - name: Run tests
         run: |
-          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt          
+          psql -h localhost -U postgres -d testdb -f tests.sql       
         env:
           PGPASSWORD: postgres
 
