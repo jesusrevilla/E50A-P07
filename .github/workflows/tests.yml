@@ -39,7 +39,7 @@ jobs:
       - name: Test tables creation
         run: |
           if [ $(grep -c "CREATE TABLE" sql_log.txt) -lt 4 ]; then
-            echo "La creación de tablas son menos de 4"
+            echo "Menos de 4 tablas creadas"
             exit 1
           else
             echo "La creación de tablas es de al menos 4 (OK)"
