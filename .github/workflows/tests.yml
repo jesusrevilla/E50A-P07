@@ -39,7 +39,7 @@ jobs:
       - name: Test tables creation
         run: |
           if [ $(grep -c "CREATE TABLE" sql_log.txt) -lt 4 ]; then
-            echo "La creación de tablas son menos de 4"
+            echo "Menos de 4 tablas creadas"
             exit 1
           else
             echo "La creación de tablas es de al menos 4 (OK)"
@@ -48,7 +48,7 @@ jobs:
       - name: Test insertions of 5 records
         run: |
           if [ $(grep -c "INSERT 0 5" sql_log.txt) -lt 5 ]; then
-            echo "Las iserciones de 5 registros son menos de 5."
+            echo "Menos de 5 inserciones de 5 registros"
             exit 1
           else
             echo "Cantidad de inserciones de 5 registros OK"
@@ -57,7 +57,7 @@ jobs:
       - name: Test insertions of 1 records
         run: |
           if [ $(grep -c "INSERT 0 1" sql_log.txt) -lt 1 ]; then
-            echo "Las inserciones de un registro son menos de una."
+            echo "Menos de una iserción de un registro."
             exit 1
           else
             echo "Cantidad de inserciones de un renglón OK"
