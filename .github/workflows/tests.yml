@@ -50,6 +50,8 @@ jobs:
           if [ $(grep -c "INSERT 0 5" sql_log.txt) -lt 5 ]; then
             echo "Las iserciones de 5 registros son menos de 5."
             exit 1
+          else
+            echo "Cantidad de inserciones de 5 registros OK"
           fi     
 
       - name: Test insertions of 1 records
@@ -58,7 +60,7 @@ jobs:
             echo "Las inserciones de un registro son menos de una."
             exit 1
           else
-            echo "Cantidad de insericiones de un renglón OK"
+            echo "Cantidad de inserciones de un renglón OK"
           fi    
           
       - name: Test query clientes con nombre que comienza con A 
