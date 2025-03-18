@@ -27,19 +27,30 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4    
 
-      - name: Install PostgreSQL client
-        run: sudo apt-get install postgresql-client        
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client build-essential libpq-dev git
 
-      - name: Wait for PostgreSQL to be ready
-        run: until pg_isready -h localhost -p 5432; do sleep 1; done
+      - name: Clone pg_cron repository
+        run: git clone https://github.com/citusdata/pg_cron.git
 
-      - name: Install pg_cron extension
-        run: sudo apt-get install postgresql-pg-cron
+      - name: Build and install pg_cron
+        run: |
+          cd pg_cron
+          make
+          sudo make install        
 
       - name: Configure PostgreSQL
         run: |
           echo "shared_preload_libraries = 'pg_cron'" >> /var/lib/postgresql/data/postgresql.conf
-          sudo systemctl restart postgresql        
+          sudo systemctl restart postgresql          
+
+      - name: Wait for PostgreSQL to be ready
+        run: until pg_isready -h localhost -p 5432; do sleep 1; done
+
+
+ 
 
       - name: Cargar esquema de la base de datos
         run: |
