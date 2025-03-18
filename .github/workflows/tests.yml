@@ -25,10 +25,21 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4      
+        uses: actions/checkout@v4    
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install postgresql-client        
 
       - name: Wait for PostgreSQL to be ready
         run: until pg_isready -h localhost -p 5432; do sleep 1; done
+
+      - name: Install pg_cron extension
+        run: sudo apt-get install postgresql-pg-cron
+
+      - name: Configure PostgreSQL
+        run: |
+          echo "shared_preload_libraries = 'pg_cron'" >> /var/lib/postgresql/data/postgresql.conf
+          sudo systemctl restart postgresql        
 
       - name: Cargar esquema de la base de datos
         run: |
@@ -57,7 +68,6 @@ jobs:
             echo "La creación de tablas es de al menos 4 (OK)"
           fi          
 
-
       - name: Test insertions of 5 records
         run: |
           if [ $(grep -c "INSERT 0 5" sql_log.txt) -lt 5 ]; then
@@ -85,4 +95,3 @@ jobs:
             exit 1
           fi
                 
-
