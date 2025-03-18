@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y postgresql-client build-essential libpq-dev git
+          sudo apt-get install -y postgresql-client postgresql-server-dev-all build-essential libpq-dev git
 
       - name: Clone pg_cron repository
         run: git clone https://github.com/citusdata/pg_cron.git
