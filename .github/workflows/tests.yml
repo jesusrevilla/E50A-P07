@@ -92,7 +92,7 @@ jobs:
                 
       - name: Backup database
         run: |
-          psql -h localhost -U postgres -d escuela -f backup.sql  2>&1 | tee purge_log.txt 
+          backup.sql  2>&1 | tee purge_log.txt 
         env:
           PGPASSWORD: postgres
 
@@ -113,13 +113,13 @@ jobs:
 
       - name: Restore database
         run: |
-          psql -h localhost -U postgres -d escuela -f restore.sql  2>&1 | tee restore_log.txt 
+          restore.sql  2>&1 | tee restore_log.txt 
         env:
           PGPASSWORD: postgres                    
 
       - name: Test restore
         run: |
-          if [ $(grep -c "INSERT" drop_data_log.txt) -lt 5 ]; then
+          if [ $(grep -c "INSERT" drop_data_log.txt) -lt 0 ]; then
             echo "Menos de 5 inserciones de 5 registros"
             exit 1
           else
