@@ -92,7 +92,7 @@ jobs:
                 
       - name: Backup database
         run: |
-          backup.sql  2>&1 | tee purge_log.txt 
+          pg_dump escuela > escuela_backup.sql  2>&1 | tee purge_log.txt 
         env:
           PGPASSWORD: postgres
 
@@ -113,7 +113,7 @@ jobs:
 
       - name: Restore database
         run: |
-          restore.sql  2>&1 | tee restore_log.txt 
+          psql escuela < escuela_backup.sql  2>&1 | tee restore_log.txt 
         env:
           PGPASSWORD: postgres                    
 
