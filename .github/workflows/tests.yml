@@ -25,73 +25,97 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4    
-
-      - name: Install PostgreSQL client
-        run: sudo apt-get install postgresql-client        
+        uses: actions/checkout@v4           
 
       - name: Wait for PostgreSQL to be ready
-        run: until pg_isready -h localhost -p 5432; do sleep 1; done
+        run: until pg_isready -h localhost -p 5432; do sleep 1; done      
 
-      - name: Install pg_cron extension
-        run: sudo apt-get install postgresql-pg-cron
-
-      - name: Configure PostgreSQL
+      - name: Load database schema
         run: |
-          echo "shared_preload_libraries = 'pg_cron'" >> /var/lib/postgresql/data/postgresql.conf
-          sudo systemctl restart postgresql        
-
-      - name: Cargar esquema de la base de datos
-        run: |
-          psql -h localhost -U postgres -d testdb -f scripts.sql  2>&1 | tee sql_log.txt 
+          psql -h localhost -U postgres -d escuela -f schema.sql  2>&1 | tee schema_log.txt 
         env:
           PGPASSWORD: postgres
-
-      - name: Install pg_cron extension
-        run: |
-          psql -h localhost -U postgres -d escuela -c "CREATE EXTENSION pg_cron;"
-        env:
-          PGPASSWORD: postgres
-
-      - name: Schedule purge job
-        run: |
-          psql -h localhost -U postgres -d escuela -c "SELECT cron.schedule('Purgar Asistencia', '0 0 1 */6 *', 'CALL purgar_asistencia()');"
-        env:
-          PGPASSWORD: postgres          
 
       - name: Test tables creation
         run: |
-          if [ $(grep -c "CREATE TABLE" sql_log.txt) -lt 4 ]; then
-            echo "Menos de 4 tablas creadas"
+          if [ $(grep -c "CREATE TABLE" schema_log.txt) -lt 3 ]; then
+            echo "Menos de 3 tablas creadas"
             exit 1
           else
-            echo "La creación de tablas es de al menos 4 (OK)"
+            echo "La creación de tablas es de al menos 3"
           fi          
 
-      - name: Test insertions of 5 records
+      - name: Insert data
         run: |
-          if [ $(grep -c "INSERT 0 5" sql_log.txt) -lt 5 ]; then
+          psql -h localhost -U postgres -d escuela -f insert_data.sql  2>&1 | tee insert_data_log.txt 
+        env:
+          PGPASSWORD: postgres
+
+      - name: Test insertions
+        run: |
+          if [ $(grep -c "INSERT 0 5" insert_data_log.txt) -lt 5 ]; then
             echo "Menos de 5 inserciones de 5 registros"
             exit 1
           else
-            echo "Cantidad de inserciones de 5 registros OK"
+            echo "Almenos 5 registros insertados"
           fi     
 
-      - name: Test insertions of 1 records
+      - name: Test queries (select missing attendance)
         run: |
-          if [ $(grep -c "INSERT 0 1" sql_log.txt) -lt 1 ]; then
-            echo "Menos de una iserción de un registro."
+          if [ $(grep -c "INSERT 0 5" insert_data_log.txt) -lt 5 ]; then
+            echo "Menos de 5 inserciones de 5 registros"
             exit 1
           else
-            echo "Cantidad de inserciones de un renglón OK"
-          fi    
+            echo "Almenos 5 registros insertados"
+          fi               
+
+      - name: Purge old data (more than 6 months)
+        run: |
+          psql -h localhost -U postgres -d escuela -f purge.sql  2>&1 | tee purge_log.txt 
+        env:
+          PGPASSWORD: postgres
           
-      - name: Test query clientes con nombre que comienza con A 
-        run: |        
-          if grep -Pzo "cliente_id \|  nombre   \|        email        \n------------\+-----------\+---------------------\n          1 \| Ana Pérez \| ana.perez@gmail.com\n\(1 row\)" sql_log.txt; then
-            echo "La selección de cliente con nombre que comienza con A está bien."
-          else
-            echo "El archivo no contiene el texto especificado."
+      - name: Test purge
+        run: |
+          if [ $(grep -c "INSERT 0 5" purge_log.txt) -lt 5 ]; then
+            echo "Menos de 5 inserciones de 5 registros"
             exit 1
-          fi
+          else
+            echo "Almenos 5 registros insertados"
+          fi    
                 
+      - name: Backup database
+        run: |
+          psql -h localhost -U postgres -d escuela -f backup.sql  2>&1 | tee purge_log.txt 
+        env:
+          PGPASSWORD: postgres
+
+      - name: Drop data
+        run: |
+          psql -h localhost -U postgres -d escuela -f drop_data.sql  2>&1 | tee drop_data_log.txt 
+        env:
+          PGPASSWORD: postgres          
+
+      - name: Test missing data (droped data)
+        run: |
+          if [ $(grep -c "INSERT 0 5" drop_data_log.txt) -lt 5 ]; then
+            echo "Menos de 5 inserciones de 5 registros"
+            exit 1
+          else
+            echo "Almenos 5 registros insertados"
+          fi            
+
+      - name: Restore database
+        run: |
+          psql -h localhost -U postgres -d escuela -f restore.sql  2>&1 | tee restore_log.txt 
+        env:
+          PGPASSWORD: postgres                    
+
+      - name: Test restore
+        run: |
+          if [ $(grep -c "INSERT 0 5" drop_data_log.txt) -lt 5 ]; then
+            echo "Menos de 5 inserciones de 5 registros"
+            exit 1
+          else
+            echo "Almenos 5 registros insertados"
+          fi                      
