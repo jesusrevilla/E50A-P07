@@ -1,0 +1,1 @@
+psql escuela < escuela_backup.sql

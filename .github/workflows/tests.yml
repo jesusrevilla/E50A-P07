@@ -42,7 +42,7 @@ jobs:
             echo "Menos de 3 tablas creadas"
             exit 1
           else
-            echo "La creación de tablas es de al menos 3"
+            echo "Tres o más tablas creadas"
           fi          
 
       - name: Insert data
@@ -53,20 +53,26 @@ jobs:
 
       - name: Test insertions
         run: |
-          if [ $(grep -c "INSERT 0 5" insert_data_log.txt) -lt 5 ]; then
-            echo "Menos de 5 inserciones de 5 registros"
+          if [ $(grep -c "INSERT" insert_data_log.txt) -lt 5 ]; then
+            echo "Menos de 5 inserciones"
             exit 1
           else
             echo "Almenos 5 registros insertados"
           fi     
 
+      - name: Query data
+        run: |
+          psql -h localhost -U postgres -d escuela -f query_data.sql  2>&1 | tee query_data_log.txt 
+        env:
+          PGPASSWORD: postgres
+
       - name: Test queries (select missing attendance)
         run: |
-          if [ $(grep -c "INSERT 0 5" insert_data_log.txt) -lt 5 ]; then
-            echo "Menos de 5 inserciones de 5 registros"
+          if [ $(grep -c "row" query_data_log.txt) -lt 2 ]; then
+            echo "Menos de 2 consultas"
             exit 1
           else
-            echo "Almenos 5 registros insertados"
+            echo "Almenos 2 consultas"
           fi               
 
       - name: Purge old data (more than 6 months)
@@ -77,11 +83,11 @@ jobs:
           
       - name: Test purge
         run: |
-          if [ $(grep -c "INSERT 0 5" purge_log.txt) -lt 5 ]; then
-            echo "Menos de 5 inserciones de 5 registros"
+          if [ $(grep -c "DELETE" purge_log.txt) -lt 1 ]; then
+            echo "Falta ejecutar purga"
             exit 1
           else
-            echo "Almenos 5 registros insertados"
+            echo "Purga executada"
           fi    
                 
       - name: Backup database
@@ -98,11 +104,11 @@ jobs:
 
       - name: Test missing data (droped data)
         run: |
-          if [ $(grep -c "INSERT 0 5" drop_data_log.txt) -lt 5 ]; then
-            echo "Menos de 5 inserciones de 5 registros"
+          if [ $(grep -c "DROP TABLE" drop_data_log.txt) -lt 1 ]; then
+            echo "Falta borrar alguna tabla"
             exit 1
           else
-            echo "Almenos 5 registros insertados"
+            echo "Se ha borrado algún registro"
           fi            
 
       - name: Restore database
@@ -113,7 +119,7 @@ jobs:
 
       - name: Test restore
         run: |
-          if [ $(grep -c "INSERT 0 5" drop_data_log.txt) -lt 5 ]; then
+          if [ $(grep -c "INSERT" drop_data_log.txt) -lt 5 ]; then
             echo "Menos de 5 inserciones de 5 registros"
             exit 1
           else
