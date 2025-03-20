@@ -127,9 +127,9 @@ jobs:
 
       - name: Test restore
         run: |
-          if [ $(grep -c "INSERT" drop_data_log.txt) -lt 0 ]; then
-            echo "Menos de 5 inserciones de 5 registros"
+          if [ $(grep -c "ALTER" drop_data_log.txt) -lt 5 ]; then
+            echo "Menos de 5 ALTER"
             exit 1
           else
-            echo "TODO"
+            echo "Database restored"
           fi                      
