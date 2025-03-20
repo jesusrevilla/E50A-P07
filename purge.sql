@@ -7,10 +7,10 @@ BEGIN
     WHERE fecha < CURRENT_DATE - INTERVAL '6 months'
     RETURNING id INTO registros_borrados;
 
-    IF FOUND THEN
-        RAISE NOTICE 'Registros eliminados: %', registros_borrados;
+    IF registros_borrados IS NOT NULL THEN
+        RAISE NOTICE 'DELETE executed: % records removed', registros_borrados;
     ELSE
-        RAISE NOTICE 'No se encontraron registros antiguos para eliminar';
+        RAISE NOTICE 'No old records to delete';
     END IF;
 END;
 $$ LANGUAGE plpgsql;
