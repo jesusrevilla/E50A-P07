@@ -120,7 +120,7 @@ jobs:
 
       - name: Restore database
         run: |
-          psql escuela < escuela_backup.sql  2>&1 | tee restore_log.txt 
+          psql -h localhost -U postgres -d escuela < escuela_backup.sql  2>&1 | tee restore_log.txt 
           cat restore_log.txt
         env:
           PGPASSWORD: postgres                    
