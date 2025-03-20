@@ -1,1 +1,1 @@
-DROP DATABASE escuela;
+DROP TABLE grupos;
