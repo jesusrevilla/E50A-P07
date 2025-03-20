@@ -1,3 +1,5 @@
+SET DateStyle = 'ISO, DMY';
+
 INSERT INTO estudiantes VALUES 
 ('180519','Christian Alejandro Cárdenas Rucoba'),
 ('180774','Samuel Martínez Luna'),
