@@ -14,3 +14,5 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+SELECT purgar_asistencia_antigua();
