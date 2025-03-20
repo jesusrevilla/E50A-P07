@@ -25,7 +25,14 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4           
+        uses: actions/checkout@v4       
+        
+      - name: Install dependencies
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17 build-essential libpq-dev git        
 
       - name: Wait for PostgreSQL to be ready
         run: until pg_isready -h localhost -p 5432; do sleep 1; done      
@@ -92,7 +99,7 @@ jobs:
                 
       - name: Backup database
         run: |
-          psql -h localhost -U postgres -d escuela -f backup.sql  2>&1 | tee purge_log.txt 
+          pg_dump -h localhost -U postgres -d escuela > escuela_backup.sql 2>&1 | tee backup_log.txt
         env:
           PGPASSWORD: postgres
 
@@ -113,15 +120,16 @@ jobs:
 
       - name: Restore database
         run: |
-          psql -h localhost -U postgres -d escuela -f restore.sql  2>&1 | tee restore_log.txt 
+          psql -h localhost -U postgres -d escuela < escuela_backup.sql  2>&1 | tee restore_log.txt 
+          cat restore_log.txt
         env:
           PGPASSWORD: postgres                    
 
       - name: Test restore
         run: |
-          if [ $(grep -c "INSERT" drop_data_log.txt) -lt 5 ]; then
-            echo "Menos de 5 inserciones de 5 registros"
+          if [ $(grep -c "ALTER" restore_log.txt) -lt 5 ]; then
+            echo "Menos de 5 ALTER"
             exit 1
           else
-            echo "Almenos 5 registros insertados"
-          fi                      
+            echo "Database restored"
+          fi   
