@@ -8,7 +8,7 @@ BEGIN
     RETURNING id INTO registros_borrados;
 
     IF registros_borrados IS NOT NULL THEN
-        RAISE NOTICE 'DELETE executed: % records removed', registros_borrados;
+        RAISE NOTICE 'DELETE' ;
     ELSE
         RAISE NOTICE 'No old records to delete';
     END IF;
