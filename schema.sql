@@ -5,12 +5,6 @@
 
 --          Ejercicios de tipos de datos
 
-
---Formato de fecha Día-Mes-Año
-SET DateStyle = 'ISO, DMY';
---Fecha y hora actual en San Luis Potosí
---current_timestamp AT TIME ZONE 'America/Mexico_City'
-
 CREATE TABLE estudiantes(
   matricula VARCHAR PRIMARY KEY,
   nombre VARCHAR
