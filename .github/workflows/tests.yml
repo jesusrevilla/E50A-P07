@@ -99,7 +99,7 @@ jobs:
                 
       - name: Backup database
         run: |
-          pg_dump -h localhost -U postgres -d escuela > escuela_backup.sql
+          pg_dump -h localhost -U postgres -d escuela > escuela_backup.sql 2>&1 | tee backup_log.txt
         env:
           PGPASSWORD: postgres
 
