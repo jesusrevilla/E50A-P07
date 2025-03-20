@@ -1,18 +1,17 @@
 CREATE OR REPLACE FUNCTION purgar_asistencia_antigua()
 RETURNS VOID AS $$
 DECLARE
-    registros_borrados INT;
+    registro_id INT;
 BEGIN
-    DELETE FROM asistencia
-    WHERE fecha < CURRENT_DATE - INTERVAL '6 months'
-    RETURNING id INTO registros_borrados;
-
-    IF registros_borrados IS NOT NULL THEN
-        RAISE NOTICE 'DELETE' ;
-    ELSE
-        RAISE NOTICE 'No old records to delete';
-    END IF;
+    FOR registro_id IN 
+        DELETE FROM asistencia
+        WHERE fecha < CURRENT_DATE - INTERVAL '6 months'
+        RETURNING id
+    LOOP
+        RAISE NOTICE 'Registro eliminado con ID: %', registro_id;
+    END LOOP;
+    
+    RAISE NOTICE 'DELETE';
 END;
 $$ LANGUAGE plpgsql;
-
 SELECT purgar_asistencia_antigua();
