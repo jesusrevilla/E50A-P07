@@ -1,1 +1,0 @@
-pg_dump escuela > escuela_backup.sql
