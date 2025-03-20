@@ -1,1 +1,1 @@
-DROP TABLE estudiantes;
+DROP TABLE asistencia;
