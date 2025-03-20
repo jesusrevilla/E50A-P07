@@ -1,1 +1,1 @@
-DROP TABLE grupos;
+DROP TABLE estudiantes;
