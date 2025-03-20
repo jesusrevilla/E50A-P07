@@ -1,1 +1,1 @@
-DROP TABLE asistencia;
+DROP DATABSE escuela;
