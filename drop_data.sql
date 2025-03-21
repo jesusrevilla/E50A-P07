@@ -1,1 +1,1 @@
-DROP TABLE asistencias;
+DROP TABLE asistencia;
