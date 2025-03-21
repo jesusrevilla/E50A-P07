@@ -1,0 +1,5 @@
+\echo '\n\tELIMINACION DE TABLAS\n'
+
+DROP TABLE IF EXISTS asistencia;
+DROP TABLE IF EXISTS estudiantes;
+DROP TABLE IF EXISTS grupos;
