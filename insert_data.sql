@@ -13,20 +13,18 @@ INSERT INTO estudiantes(nombre_estudiante, carrera, ID_Personal, Id_grupo) VALUE
 INSERT INTO asistencia(fecha, hora, asis, ID_estudiante) VALUES
 ('2025-03-19', '18:05:15', true,1),
 ('2025-03-19', '18:06:26', true,2),
-('2025-03-19', '18:10:52', false,3),
+('2025-03-19', '18:10:52', false,3);
 
-
+INSERT INTO asistencia(fecha, hora, asis, ID_estudiante) VALUES
 ('2025-03-18', '18:05:15', true, 1),
 ('2025-03-18', '18:06:26', false, 2),
-('2025-03-18', '18:10:52', true, 3),
+('2025-03-18', '18:10:52', true, 3);
 
-
+INSERT INTO asistencia(fecha, hora, asis, ID_estudiante) VALUES
 ('2024-08-19', '18:05:15', true,1),
 ('2024-08-19', '18:06:26', true,2),
 ('2024-08-19', '18:10:52', true,3),
-
 ('2024-07-18', '18:05:15', true,1),
 ('2024-07-18', '18:06:26', true,2),
 ('2024-07-18', '18:10:52', true,3);
-
 
