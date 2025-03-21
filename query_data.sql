@@ -1,3 +1,3 @@
 SELECT * FROM grupos; 
 SELECT * FROM estudiantes;
-SELECT * FROM asistencias;
+SELECT * FROM asistencia;
