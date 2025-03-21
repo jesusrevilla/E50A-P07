@@ -29,3 +29,4 @@ INSERT INTO asistencias(fecha, hora, asis, ID_estudiante) VALUES
 ('2024-07-18', '18:06:26', true,2),
 ('2024-07-18', '18:10:52', true,3);
 
+
