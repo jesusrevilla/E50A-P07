@@ -10,7 +10,7 @@ INSERT INTO estudiantes(nombre_estudiante, carrera, ID_Personal, Id_grupo) VALUE
 ('Antonio Franco Pardo', 'ITI', 171213, 3);
 
 
-INSERT INTO asistencias(fecha, hora, asis, ID_estudiante) VALUES
+INSERT INTO asistencia(fecha, hora, asis, ID_estudiante) VALUES
 ('2025-03-19', '18:05:15', true,1),
 ('2025-03-19', '18:06:26', true,2),
 ('2025-03-19', '18:10:52', false,3),
