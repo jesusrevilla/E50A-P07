@@ -13,7 +13,7 @@ CREATE TABLE estudiantes (
   FOREIGN KEY (Id_grupo) references grupos(Id)
 );
 
-CREATE TABLE asistencias (
+CREATE TABLE asistencia (
   Id SERIAL PRIMARY KEY,
   fecha VARCHAR(30) NOT NULL,
   hora VARCHAR(30) NOT NULL,
