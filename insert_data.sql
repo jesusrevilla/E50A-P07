@@ -4,6 +4,7 @@ VALUES
   ('Maria' ,'Lopez', '2023-08-05'),
   ('Carlos', 'Ruiz', '2023-12-15'),
   ('Jose', 'Sánchez', '2023-12-15'),
+    ('Jose', 'Ramos', '2023-12-15'),
   ('Ana', 'Gómez', '2022-11-22');
 
 INSERT INTO profesore (nombre,apellido, salario, fecha_de_contrato)
@@ -12,6 +13,7 @@ VALUES
   (' Lucia',' Sánchez', 48000.00, '2022-09-10'),
   (' Marco',' Ruiz', 48000.00, '2022-09-10'),
   (' Sebastian',' Lopez', 48000.00, '2022-09-10'),
+  (' Rogelio',' Lopez', 60000.00, '2022-09-10'),
   (' Juan',' Fernández', 55000.00, '2019-05-01');
 
 INSERT INTO cursos (nombre, id_profesor)
@@ -20,6 +22,7 @@ VALUES
   ('Historia', 2),
   ('Física', 3),
   ('Español', 4),
+  ('Ingles', 6),
   ('Ed_Fisica', 5);
   
 
